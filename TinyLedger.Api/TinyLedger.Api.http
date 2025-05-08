@@ -1,0 +1,6 @@
+@TinyLedger.Api_HostAddress = http://localhost:5078
+
+GET {{TinyLedger.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
