@@ -44,7 +44,7 @@ This API follows **Richardson Maturity Model Level 2**, which means:
 1. **Clone the repo** and navigate to the project root:
 
 ```bash
-git clone https://github.com/yourusername/TinyLedger.git
+git clone https://github.com/JanosPalinkas/TinyLedger.git
 cd TinyLedger
 ```
 
@@ -101,6 +101,18 @@ All endpoints are scoped under `api/accounts/{accountId}` for proper RESTful res
 ---
 
 ## ✅ Tests
+
+Unit tests have been added for all key use cases using xUnit and Moq:
+
+| Use Case                         | Test File                                           |
+|----------------------------------|-----------------------------------------------------|
+| Record transaction (Command)     | `RecordTransactionCommandHandlerTests.cs`          |
+| Get balance (Query)              | `GetBalanceQueryHandlerTests.cs`                   |
+| Get transaction history (Query)  | `GetTransactionHistoryQueryHandlerTests.cs`        |
+
+These tests validate business logic, including account routing, validation, and proper repository usage.
+
+
 
 Run the test suite using:
 
