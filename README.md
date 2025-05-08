@@ -74,7 +74,7 @@ This gives you an interactive interface to explore and test the API.
 You can test the API through:
 - Swagger UI (recommended for manual tests)
 - Any REST client like Postman or cURL
-- Automated unit tests (see `TinyLedger.Tests` project)
+- Automated unit & integration tests
 
 ---
 
@@ -102,25 +102,57 @@ All endpoints are scoped under `api/accounts/{accountId}` for proper RESTful res
 
 ## ✅ Tests
 
-Unit tests have been added for all key use cases using xUnit and Moq:
+This project includes both **unit tests** and **integration tests** using xUnit and Moq.
+
+### ▶️ Run All Tests
+
+To run all tests with detailed output:
+
+```bash
+dotnet test TinyLedger.Tests --logger "console;verbosity=detailed"
+```
+
+This includes:
+- Unit tests for core business logic
+- Integration tests that call real API endpoints
+
+### 📊 Test Coverage
+
+We use:
+- `coverlet.collector` to collect code coverage
+- `reportgenerator` to generate a readable HTML report
+
+#### Generate Coverage Report
+
+```bash
+dotnet test TinyLedger.Tests --collect:"XPlat Code Coverage"
+```
+
+Then run:
+
+```bash
+reportgenerator \
+  "-reports:TinyLedger.Tests/TestResults/**/coverage.cobertura.xml" \
+  "-targetdir:coverage-report" \
+  "-reporttypes:Html"
+```
+
+Then open the HTML report:
+
+```bash
+open coverage-report/index.html
+```
+
+---
+
+### 🧪 Test Coverage Breakdown
 
 | Use Case                         | Test File                                           |
 |----------------------------------|-----------------------------------------------------|
 | Record transaction (Command)     | `RecordTransactionCommandHandlerTests.cs`          |
 | Get balance (Query)              | `GetBalanceQueryHandlerTests.cs`                   |
 | Get transaction history (Query)  | `GetTransactionHistoryQueryHandlerTests.cs`        |
-
-These tests validate business logic, including account routing, validation, and proper repository usage.
-
-
-
-Run the test suite using:
-
-```bash
-dotnet test TinyLedger.Tests
-```
-
-This will validate business logic and handler behavior.
+| Full API integration             | `LedgerIntegrationTests.cs`                        |
 
 ---
 
@@ -130,7 +162,9 @@ This will validate business logic and handler behavior.
 - ASP.NET Core Web API
 - MediatR (CQRS & decoupling)
 - Clean Architecture
-- xUnit (testing)
+- xUnit (unit & integration testing)
+- Moq (mocking dependencies)
+- Coverlet + ReportGenerator (code coverage)
 - Swagger (OpenAPI documentation)
 
 ---
