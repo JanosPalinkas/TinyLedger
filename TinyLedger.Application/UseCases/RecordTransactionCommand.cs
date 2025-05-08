@@ -3,7 +3,7 @@ using TinyLedger.Domain;
 
 namespace TinyLedger.Application.UseCases;
 
-public class RecordTransactionCommand : IRequest<Unit>
+public class RecordTransactionCommand : IRequest
 {
     public string AccountId { get; set; } = string.Empty;
     public decimal Amount { get; }

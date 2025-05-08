@@ -3,7 +3,7 @@ using TinyLedger.Domain;
 
 namespace TinyLedger.Application.UseCases;
 
-public class RecordTransactionCommandHandler : IRequestHandler<RecordTransactionCommand, Unit>
+public class RecordTransactionCommandHandler : IRequestHandler<RecordTransactionCommand>
 {
     private readonly ILedgerRepository _repository;
 
@@ -12,11 +12,11 @@ public class RecordTransactionCommandHandler : IRequestHandler<RecordTransaction
         _repository = repository;
     }
 
-    public Task<Unit> Handle(RecordTransactionCommand request, CancellationToken cancellationToken)
+    public Task Handle(RecordTransactionCommand request, CancellationToken cancellationToken)
     {
         var transaction = new Transaction(request.Amount, request.Type, request.Description);
         _repository.AddTransaction(request.AccountId, transaction);
 
-        return Task.FromResult(Unit.Value);
+        return Task.CompletedTask;
     }
 }

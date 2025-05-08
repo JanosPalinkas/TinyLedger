@@ -1,51 +1,57 @@
 using TinyLedger.Domain;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace TinyLedger.Infrastructure;
-
-public class InMemoryLedgerRepository : ILedgerRepository
+namespace TinyLedger.Infrastructure
 {
-    private readonly ConcurrentDictionary<string, List<Transaction>> _ledger = new();
-
-    public void AddTransaction(Transaction transaction)
+    public class InMemoryLedgerRepository : ILedgerRepository
     {
-        // Default to single-user mode if no AccountId logic is required
-        AddTransaction("default", transaction);
-    }
+        private readonly Dictionary<string, List<Transaction>> _store = new();
+        private readonly object _lock = new();
 
-    public void AddTransaction(string accountId, Transaction transaction)
-    {
-        var transactions = _ledger.GetOrAdd(accountId, _ => new List<Transaction>());
-        lock (transactions) // ensure thread safety for the list
+        public void AddTransaction(string accountId, Transaction transaction)
         {
-            transactions.Add(transaction);
-        }
-    }
-
-    public IReadOnlyList<Transaction> GetTransactions()
-    {
-        return GetTransactionHistory("default").Result;
-    }
-
-    public Task<IReadOnlyList<Transaction>> GetTransactionHistory(string accountId)
-    {
-        if (_ledger.TryGetValue(accountId, out var list))
-        {
-            lock (list)
+            lock (_lock)
             {
-                return Task.FromResult<IReadOnlyList<Transaction>>(list.ToList().AsReadOnly());
+                if (!_store.ContainsKey(accountId))
+                {
+                    _store[accountId] = new List<Transaction>();
+                }
+
+                _store[accountId].Add(transaction);
             }
         }
 
-        return Task.FromResult<IReadOnlyList<Transaction>>(new List<Transaction>().AsReadOnly());
-    }
+        public Task<decimal> GetBalance(string accountId)
+        {
+            lock (_lock)
+            {
+                if (!_store.ContainsKey(accountId))
+                {
+                    return Task.FromResult(0m);
+                }
 
-    public Task<decimal> GetBalance(string accountId)
-    {
-        return Task.FromResult(
-            _ledger.TryGetValue(accountId, out var list)
-                ? list.Sum(t => t.GetSignedAmount())
-                : 0m
-        );
+                var balance = _store[accountId]
+                    .Sum(t => t.Type == TransactionType.Deposit ? t.Amount : -t.Amount);
+
+                return Task.FromResult(balance);
+            }
+        }
+
+        public Task<IReadOnlyList<Transaction>> GetTransactionHistory(string accountId)
+        {
+            lock (_lock)
+            {
+                if (!_store.ContainsKey(accountId))
+                {
+                    return Task.FromResult((IReadOnlyList<Transaction>)new List<Transaction>());
+                }
+
+                // Clone list to avoid exposing internal reference
+                var history = _store[accountId].ToList();
+                return Task.FromResult((IReadOnlyList<Transaction>)history);
+            }
+        }
     }
 }
