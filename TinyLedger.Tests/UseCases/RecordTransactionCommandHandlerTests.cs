@@ -4,6 +4,7 @@ using TinyLedger.Domain;
 
 namespace TinyLedger.Tests.UseCases;
 
+[Trait("Category", "UnitTests")]
 public class RecordTransactionCommandHandlerTests
 {
     private readonly Mock<ILedgerRepository> _repositoryMock;

@@ -14,6 +14,7 @@ This project follows **Clean Architecture**, using four main layers:
 - **API**: Entry point (ASP.NET Core Web API), routing, DI, and request handling
 
 ### ✨ Why Clean Architecture?
+
 - Encourages **separation of concerns**
 - Keeps business logic independent from frameworks
 - Improves **testability** and **maintainability**
@@ -25,14 +26,15 @@ This project follows **Clean Architecture**, using four main layers:
 
 This API follows **Richardson Maturity Model Level 2**, which means:
 
-| Level | Description | Applied? |
-|-------|-------------|----------|
-| Level 0 | One URI, one verb (POST everything) | ❌ |
-| Level 1 | Multiple URIs but not resource-based | ❌ |
-| **Level 2** | ✅ Proper use of HTTP verbs and resource-centric URIs | ✅ |
-| Level 3 | Hypermedia (HATEOAS) | ❌ Not implemented |
+| Level       | Description                                           | Applied?           |
+| ----------- | ----------------------------------------------------- | ------------------ |
+| Level 0     | One URI, one verb (POST everything)                   | ❌                 |
+| Level 1     | Multiple URIs but not resource-based                  | ❌                 |
+| **Level 2** | ✅ Proper use of HTTP verbs and resource-centric URIs | ✅                 |
+| Level 3     | Hypermedia (HATEOAS)                                  | ❌ Not implemented |
 
 ### Why not Level 3 (HATEOAS)?
+
 - The API is simple and internal-facing, so **hypermedia controls are not needed**
 - HATEOAS is often reserved for **public or discoverable APIs**
 - Adding HATEOAS would add complexity without functional gain in this scenario
@@ -72,6 +74,7 @@ This gives you an interactive interface to explore and test the API.
 ## 🧪 Testing the API
 
 You can test the API through:
+
 - Swagger UI (recommended for manual tests)
 - Any REST client like Postman or cURL
 - Automated unit & integration tests
@@ -82,11 +85,11 @@ You can test the API through:
 
 All endpoints are scoped under `api/accounts/{accountId}` for proper RESTful resource modeling.
 
-| Method | Endpoint                                | Description                  |
-|--------|-----------------------------------------|------------------------------|
+| Method | Endpoint                                 | Description                 |
+| ------ | ---------------------------------------- | --------------------------- |
 | POST   | `/api/accounts/{accountId}/transactions` | Record a deposit/withdrawal |
-| GET    | `/api/accounts/{accountId}/transactions` | Get transaction history      |
-| GET    | `/api/accounts/{accountId}/balance`      | Get current balance          |
+| GET    | `/api/accounts/{accountId}/transactions` | Get transaction history     |
+| GET    | `/api/accounts/{accountId}/balance`      | Get current balance         |
 
 ### 🔧 Example `POST` request body
 
@@ -113,12 +116,26 @@ dotnet test TinyLedger.Tests --logger "console;verbosity=detailed"
 ```
 
 This includes:
+
 - Unit tests for core business logic
 - Integration tests that call real API endpoints
+
+To run only the unit tests:
+
+```bash
+dotnet test --filter "Category=UnitTests"
+```
+
+To run only the Integration tests:
+
+```bash
+dotnet test --filter "Category=Integration"
+```
 
 ### 📊 Test Coverage
 
 We use:
+
 - `coverlet.collector` to collect code coverage
 - `reportgenerator` to generate a readable HTML report
 
@@ -147,12 +164,12 @@ open coverage-report/index.html
 
 ### 🧪 Test Coverage Breakdown
 
-| Use Case                         | Test File                                           |
-|----------------------------------|-----------------------------------------------------|
-| Record transaction (Command)     | `RecordTransactionCommandHandlerTests.cs`          |
-| Get balance (Query)              | `GetBalanceQueryHandlerTests.cs`                   |
-| Get transaction history (Query)  | `GetTransactionHistoryQueryHandlerTests.cs`        |
-| Full API integration             | `LedgerIntegrationTests.cs`                        |
+| Use Case                        | Test File                                   |
+| ------------------------------- | ------------------------------------------- |
+| Record transaction (Command)    | `RecordTransactionCommandHandlerTests.cs`   |
+| Get balance (Query)             | `GetBalanceQueryHandlerTests.cs`            |
+| Get transaction history (Query) | `GetTransactionHistoryQueryHandlerTests.cs` |
+| Full API integration            | `LedgerIntegrationTests.cs`                 |
 
 ---
 

@@ -7,6 +7,7 @@ using Xunit;
 
 namespace TinyLedger.Tests.Integration;
 
+[Trait("Category", "Integration")]
 public class LedgerIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly HttpClient _client;
