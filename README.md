@@ -91,6 +91,36 @@ All endpoints are scoped under `api/accounts/{accountId}` for proper RESTful res
 | GET    | `/api/accounts/{accountId}/transactions` | Get transaction history     |
 | GET    | `/api/accounts/{accountId}/balance`      | Get current balance         |
 
+---
+
+### 📄 Pagination (New Feature)
+
+The `GET /transactions` endpoint now supports **offset-based pagination**:
+
+#### 🔹 Query Parameters:
+- `page` (default: 1): Page number
+- `pageSize` (default: 20): Items per page
+
+#### 🔹 Example:
+
+```http
+GET /api/accounts/test/transactions?page=2&pageSize=5
+```
+
+#### 🔹 Response Format:
+```json
+{
+  "items": [ ... ],
+  "totalItems": 42,
+  "page": 2,
+  "pageSize": 5
+}
+```
+
+This ensures efficient access to large transaction lists without overloading the response.
+
+---
+
 ### 🔧 Example `POST` request body
 
 ```json

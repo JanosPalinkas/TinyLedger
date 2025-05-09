@@ -1,52 +1,59 @@
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TinyLedger.Application.UseCases;
 using TinyLedger.Domain;
+using MediatR;
+using TinyLedger.Api.Dtos;
 
-namespace TinyLedger.Api.Controllers;
-
-[ApiController]
-[Route("api/accounts/{accountId}")]
-public class LedgerController : ControllerBase
+namespace TinyLedger.Api.Controllers
 {
-    private readonly IMediator _mediator;
-
-    public LedgerController(IMediator mediator)
+    [ApiController]
+    [Route("api")]
+    public class LedgerController : ControllerBase
     {
-        _mediator = mediator;
-    }
+        private readonly IMediator _mediator;
 
-    [HttpPost("transactions")]
-    public async Task<IActionResult> RecordTransaction(string accountId, [FromBody] RecordTransactionRequest request)
-    {
-        var command = new RecordTransactionCommand(request.Amount, request.Type, request.Description)
+        public LedgerController(IMediator mediator)
         {
-            AccountId = accountId
-        };
+            _mediator = mediator;
+        }
 
-        await _mediator.Send(command);
+        [HttpPost("accounts/{accountId}/transactions")]
+        public async Task<IActionResult> RecordTransaction(string accountId, [FromBody] RecordTransactionCommand command)
+        {
+            command.AccountId = accountId;
+            await _mediator.Send(command);
+            return Ok();
+        }
 
-        return CreatedAtAction(nameof(GetTransactionHistory), new { accountId }, null);
+        [HttpGet("accounts/{accountId}/balance")]
+        public async Task<ActionResult<decimal>> GetBalance(string accountId)
+        {
+            var result = await _mediator.Send(new GetBalanceQuery(accountId));
+            return Ok(result);
+        }
+
+        [HttpGet("accounts/{accountId}/transactions")]
+        public async Task<ActionResult<PaginatedResult<Transaction>>> GetTransactionHistory(
+            string accountId,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 20)
+        {
+            var allTransactions = await _mediator.Send(new GetTransactionHistoryQuery(accountId));
+
+            var paginated = allTransactions
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            var result = new PaginatedResult<Transaction>
+            {
+                Items = paginated,
+                TotalItems = allTransactions.Count,
+                Page = page,
+                PageSize = pageSize
+            };
+
+            return Ok(result);
+        }
     }
-
-    [HttpGet("balance")]
-    public async Task<IActionResult> GetBalance(string accountId)
-    {
-        var balance = await _mediator.Send(new GetBalanceQuery(accountId));
-        return Ok(balance);
-    }
-
-    [HttpGet("transactions")]
-    public async Task<IActionResult> GetTransactionHistory(string accountId)
-    {
-        var transactions = await _mediator.Send(new GetTransactionHistoryQuery(accountId));
-        return Ok(transactions);
-    }
-}
-
-public class RecordTransactionRequest
-{
-    public decimal Amount { get; set; }
-    public TransactionType Type { get; set; }
-    public string Description { get; set; } = string.Empty;
 }
