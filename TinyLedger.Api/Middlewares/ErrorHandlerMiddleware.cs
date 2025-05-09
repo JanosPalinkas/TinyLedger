@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 
@@ -6,12 +7,10 @@ namespace TinyLedger.Api.Middlewares
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<ErrorHandlerMiddleware> _logger;
 
-        public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
+        public ErrorHandlerMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)
@@ -20,10 +19,23 @@ namespace TinyLedger.Api.Middlewares
             {
                 await _next(context);
             }
+            catch (ValidationException vex)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                context.Response.ContentType = "application/json";
+
+                var response = new
+                {
+                    status = 400,
+                    error = "Validation error",
+                    details = vex.Message
+                };
+
+                var json = JsonSerializer.Serialize(response);
+                await context.Response.WriteAsync(json);
+            }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unhandled exception occurred");
-
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
@@ -35,7 +47,6 @@ namespace TinyLedger.Api.Middlewares
                 };
 
                 var json = JsonSerializer.Serialize(response);
-
                 await context.Response.WriteAsync(json);
             }
         }

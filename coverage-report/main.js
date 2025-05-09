@@ -214,10 +214,11 @@ var assemblies = [
     "name": "TinyLedger.Api",
     "classes": [
       { "name": "Program", "rp": "TinyLedger.Api_Program.html", "cl": 20, "ucl": 0, "cal": 20, "tl": 36, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Api.Controllers.ErrorSimulationController", "rp": "TinyLedger.Api_ErrorSimulationController.html", "cl": 2, "ucl": 0, "cal": 2, "tl": 17, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "TinyLedger.Api.Controllers.LedgerController", "rp": "TinyLedger.Api_LedgerController.html", "cl": 28, "ucl": 0, "cal": 28, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "TinyLedger.Api.Converters.SafeEnumConverter<T>", "rp": "TinyLedger.Api_SafeEnumConverter_1.html", "cl": 8, "ucl": 2, "cal": 10, "tl": 26, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
       { "name": "TinyLedger.Api.Dtos.PaginatedResult<T>", "rp": "TinyLedger.Api_PaginatedResult_1.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "TinyLedger.Api.Middlewares.ErrorHandlerMiddleware", "rp": "TinyLedger.Api_ErrorHandlerMiddleware.html", "cl": 10, "ucl": 14, "cal": 24, "tl": 43, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Api.Middlewares.ErrorHandlerMiddleware", "rp": "TinyLedger.Api_ErrorHandlerMiddleware.html", "cl": 35, "ucl": 0, "cal": 35, "tl": 54, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "TinyLedger.Application",

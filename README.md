@@ -169,25 +169,23 @@ We use:
 - `coverlet.collector` to collect code coverage
 - `reportgenerator` to generate a readable HTML report
 
-#### Generate Coverage Report
+You can run the complete process using the script below:
 
 ```bash
-dotnet test TinyLedger.Tests --collect:"XPlat Code Coverage"
+./generate-coverage.sh
 ```
 
-Then run:
+This script will:
+- Clean previous build/test artifacts
+- Rebuild the solution
+- Run all tests with coverage collection
+- Generate the coverage report in HTML
+- Automatically open the report in your browser
 
-```bash
-reportgenerator \
-  "-reports:TinyLedger.Tests/TestResults/**/coverage.cobertura.xml" \
-  "-targetdir:coverage-report" \
-  "-reporttypes:Html"
+The final report will be available at:
+
 ```
-
-Then open the HTML report:
-
-```bash
-open coverage-report/index.html
+coverage-report/index.html
 ```
 
 ---

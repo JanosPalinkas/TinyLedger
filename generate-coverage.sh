@@ -24,5 +24,11 @@ reportgenerator \
   "-targetdir:$REPORT_DIR" \
   "-reporttypes:Html"
 
-echo "✅ Done! Open your report:"
-echo "open $REPORT_DIR/index.html"
+echo "✅ Coverage report generated at: $REPORT_DIR/index.html"
+
+# Automatically open the report in the default browser (macOS)
+if [ -f "$REPORT_DIR/index.html" ]; then
+  open "$REPORT_DIR/index.html"
+else
+  echo "⚠️ Could not find the HTML report to open."
+fi
