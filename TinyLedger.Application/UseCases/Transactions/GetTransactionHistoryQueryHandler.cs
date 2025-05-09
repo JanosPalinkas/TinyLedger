@@ -1,7 +1,7 @@
 using MediatR;
 using TinyLedger.Domain;
 
-namespace TinyLedger.Application.UseCases;
+namespace TinyLedger.Application.UseCases.Transactions;
 
 public class GetTransactionHistoryQueryHandler : IRequestHandler<GetTransactionHistoryQuery, IReadOnlyList<Transaction>>
 {

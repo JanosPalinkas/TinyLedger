@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TinyLedger.Application.UseCases;
+using TinyLedger.Application.UseCases.Balance;
+using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 using MediatR;
 using TinyLedger.Api.Dtos;

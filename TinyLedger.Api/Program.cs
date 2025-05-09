@@ -1,5 +1,5 @@
 using MediatR;
-using TinyLedger.Application.UseCases;
+using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 using TinyLedger.Infrastructure;
 

@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace TinyLedger.Application.UseCases;
+namespace TinyLedger.Application.UseCases.Balance;
 
 public class GetBalanceQuery : IRequest<decimal>
 {

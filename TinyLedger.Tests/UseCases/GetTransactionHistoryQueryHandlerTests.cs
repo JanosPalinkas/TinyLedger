@@ -1,5 +1,5 @@
 using Moq;
-using TinyLedger.Application.UseCases;
+using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 
 namespace TinyLedger.Tests.UseCases;
