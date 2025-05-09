@@ -2,6 +2,7 @@ using MediatR;
 using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 using TinyLedger.Infrastructure;
+using TinyLedger.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
 app.Run();
 
