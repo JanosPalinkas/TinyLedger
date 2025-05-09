@@ -5,7 +5,7 @@ namespace TinyLedger.Domain
 {
     public interface ILedgerRepository
     {
-        void AddTransaction(string accountId, Transaction transaction);
+        Task AddTransaction(string accountId, Transaction transaction);
         Task<decimal> GetBalance(string accountId);
         Task<IReadOnlyList<Transaction>> GetTransactionHistory(string accountId);
     }
