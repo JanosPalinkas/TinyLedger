@@ -1,6 +1,7 @@
 using Moq;
 using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace TinyLedger.Tests.UseCases;
 
@@ -50,5 +51,21 @@ public class RecordTransactionCommandHandlerTests
 
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentException>(() => _handler.Handle(command, CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task Should_Throw_ValidationException_When_Withdraw_Exceeds_Balance()
+    {
+        // Arrange
+        var command = new RecordTransactionCommand(150, TransactionType.Withdraw, "Overdraw")
+        {
+            AccountId = "test-account"
+        };
+
+        _repositoryMock.Setup(r => r.GetBalance("test-account"))
+            .ReturnsAsync(100);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ValidationException>(() => _handler.Handle(command, CancellationToken.None));
     }
 }

@@ -1,5 +1,6 @@
 using MediatR;
 using TinyLedger.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace TinyLedger.Application.UseCases.Transactions;
 
@@ -12,11 +13,19 @@ public class RecordTransactionCommandHandler : IRequestHandler<RecordTransaction
         _repository = repository;
     }
 
-    public Task Handle(RecordTransactionCommand request, CancellationToken cancellationToken)
+    public async Task Handle(RecordTransactionCommand request, CancellationToken cancellationToken)
     {
-        var transaction = new Transaction(request.Amount, request.Type, request.Description);
-        _repository.AddTransaction(request.AccountId, transaction);
+        if (request.Type == TransactionType.Withdraw)
+        {
+            var currentBalance = await _repository.GetBalance(request.AccountId);
 
-        return Task.CompletedTask;
+            if (currentBalance < request.Amount)
+            {
+                throw new ValidationException("Insufficient balance to perform withdrawal.");
+            }
+        }
+
+        var transaction = new Transaction(request.Amount, request.Type, request.Description);
+        await _repository.AddTransaction(request.AccountId, transaction);
     }
 }

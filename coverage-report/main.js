@@ -211,14 +211,23 @@ for (i = 0, l = charts.length; i < l; i++) {
 
 var assemblies = [
   {
+    "name": "TinyLedger.Api",
+    "classes": [
+      { "name": "Program", "rp": "TinyLedger.Api_Program.html", "cl": 20, "ucl": 0, "cal": 20, "tl": 36, "cb": 2, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Api.Controllers.LedgerController", "rp": "TinyLedger.Api_LedgerController.html", "cl": 28, "ucl": 0, "cal": 28, "tl": 60, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Api.Converters.SafeEnumConverter<T>", "rp": "TinyLedger.Api_SafeEnumConverter_1.html", "cl": 8, "ucl": 2, "cal": 10, "tl": 26, "cb": 1, "tb": 2, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Api.Dtos.PaginatedResult<T>", "rp": "TinyLedger.Api_PaginatedResult_1.html", "cl": 4, "ucl": 0, "cal": 4, "tl": 10, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Api.Middlewares.ErrorHandlerMiddleware", "rp": "TinyLedger.Api_ErrorHandlerMiddleware.html", "cl": 10, "ucl": 14, "cal": 24, "tl": 43, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+    ]},
+  {
     "name": "TinyLedger.Application",
     "classes": [
-      { "name": "TinyLedger.Application.UseCases.GetBalanceQuery", "rp": "TinyLedger.Application_GetBalanceQuery.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "TinyLedger.Application.UseCases.GetBalanceQueryHandler", "rp": "TinyLedger.Application_GetBalanceQueryHandler.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "TinyLedger.Application.UseCases.GetTransactionHistoryQuery", "rp": "TinyLedger.Application_GetTransactionHistoryQuery.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "TinyLedger.Application.UseCases.GetTransactionHistoryQueryHandler", "rp": "TinyLedger.Application_GetTransactionHistoryQueryHandler.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "TinyLedger.Application.UseCases.RecordTransactionCommand", "rp": "TinyLedger.Application_RecordTransactionCommand.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
-      { "name": "TinyLedger.Application.UseCases.RecordTransactionCommandHandler", "rp": "TinyLedger.Application_RecordTransactionCommandHandler.html", "cl": 9, "ucl": 0, "cal": 9, "tl": 22, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Application.UseCases.Balance.GetBalanceQuery", "rp": "TinyLedger.Application_GetBalanceQuery.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 13, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Application.UseCases.Balance.GetBalanceQueryHandler", "rp": "TinyLedger.Application_GetBalanceQueryHandler.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Application.UseCases.Transactions.GetTransactionHistoryQuery", "rp": "TinyLedger.Application_GetTransactionHistoryQuery.html", "cl": 5, "ucl": 0, "cal": 5, "tl": 14, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Application.UseCases.Transactions.GetTransactionHistoryQueryHandler", "rp": "TinyLedger.Application_GetTransactionHistoryQueryHandler.html", "cl": 7, "ucl": 0, "cal": 7, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Application.UseCases.Transactions.RecordTransactionCommand", "rp": "TinyLedger.Application_RecordTransactionCommand.html", "cl": 10, "ucl": 0, "cal": 10, "tl": 19, "cb": 0, "tb": 0, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Application.UseCases.Transactions.RecordTransactionCommandHandler", "rp": "TinyLedger.Application_RecordTransactionCommandHandler.html", "cl": 14, "ucl": 1, "cal": 15, "tl": 31, "cb": 3, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
   {
     "name": "TinyLedger.Domain",
@@ -228,7 +237,7 @@ var assemblies = [
   {
     "name": "TinyLedger.Infrastructure",
     "classes": [
-      { "name": "TinyLedger.Infrastructure.InMemoryLedgerRepository", "rp": "TinyLedger.Infrastructure_InMemoryLedgerRepository.html", "cl": 0, "ucl": 29, "cal": 29, "tl": 51, "cb": 0, "tb": 4, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
+      { "name": "TinyLedger.Infrastructure.InMemoryLedgerRepository", "rp": "TinyLedger.Infrastructure_InMemoryLedgerRepository.html", "cl": 18, "ucl": 2, "cal": 20, "tl": 37, "cb": 2, "tb": 6, "cm": 0, "fcm": 0, "tm": 0, "lch": [], "bch": [], "mch": [], "mfch": [], "hc": [], "metrics": { } },
     ]},
 ];
 

@@ -1,43 +1,37 @@
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TinyLedger.Domain;
 
-namespace TinyLedger.Infrastructure
+namespace TinyLedger.Infrastructure;
+
+public class InMemoryLedgerRepository : ILedgerRepository
 {
-    public class InMemoryLedgerRepository : ILedgerRepository
+    private readonly ConcurrentDictionary<string, ConcurrentQueue<Transaction>> _transactions = new();
+    private readonly ConcurrentDictionary<string, decimal> _balances = new();
+
+    public Task AddTransaction(string accountId, Transaction transaction)
     {
-        private readonly ConcurrentDictionary<string, ConcurrentQueue<Transaction>> _store = new();
+        var queue = _transactions.GetOrAdd(accountId, _ => new ConcurrentQueue<Transaction>());
+        queue.Enqueue(transaction);
 
-        public Task AddTransaction(string accountId, Transaction transaction)
-        {
-            var queue = _store.GetOrAdd(accountId, _ => new ConcurrentQueue<Transaction>());
-            queue.Enqueue(transaction);
-            return Task.CompletedTask;
-        }
+        _balances.AddOrUpdate(accountId,
+            transaction.Type == TransactionType.Deposit ? transaction.Amount : -transaction.Amount,
+            (_, currentBalance) => currentBalance + (transaction.Type == TransactionType.Deposit ? transaction.Amount : -transaction.Amount)
+        );
 
-        public Task<decimal> GetBalance(string accountId)
-        {
-            if (!_store.TryGetValue(accountId, out var queue))
-                return Task.FromResult(0m);
+        return Task.CompletedTask;
+    }
 
-            decimal balance = 0;
-            foreach (var t in queue)
-            {
-                balance += t.Type == TransactionType.Deposit ? t.Amount : -t.Amount;
-            }
+    public Task<IReadOnlyList<Transaction>> GetTransactionHistory(string accountId)
+    {
+        if (_transactions.TryGetValue(accountId, out var queue))
+            return Task.FromResult<IReadOnlyList<Transaction>>(queue.ToList());
 
-            return Task.FromResult(balance);
-        }
+        return Task.FromResult<IReadOnlyList<Transaction>>(new List<Transaction>());
+    }
 
-        public Task<IReadOnlyList<Transaction>> GetTransactionHistory(string accountId)
-        {
-            if (!_store.TryGetValue(accountId, out var queue))
-                return Task.FromResult((IReadOnlyList<Transaction>)new List<Transaction>());
-
-            var history = queue.ToList();
-            return Task.FromResult((IReadOnlyList<Transaction>)history);
-        }
+    public Task<decimal> GetBalance(string accountId)
+    {
+        _balances.TryGetValue(accountId, out var balance);
+        return Task.FromResult(balance);
     }
 }
