@@ -8,43 +8,36 @@ namespace TinyLedger.Infrastructure
 {
     public class InMemoryLedgerRepository : ILedgerRepository
     {
-        private readonly ConcurrentDictionary<string, List<Transaction>> _store = new();
+        private readonly ConcurrentDictionary<string, ConcurrentQueue<Transaction>> _store = new();
 
         public Task AddTransaction(string accountId, Transaction transaction)
         {
-            var list = _store.GetOrAdd(accountId, _ => new List<Transaction>());
-
-            lock (list)
-            {
-                list.Add(transaction);
-            }
-
+            var queue = _store.GetOrAdd(accountId, _ => new ConcurrentQueue<Transaction>());
+            queue.Enqueue(transaction);
             return Task.CompletedTask;
         }
 
         public Task<decimal> GetBalance(string accountId)
         {
-            if (!_store.TryGetValue(accountId, out var list))
+            if (!_store.TryGetValue(accountId, out var queue))
                 return Task.FromResult(0m);
 
-            lock (list)
+            decimal balance = 0;
+            foreach (var t in queue)
             {
-                var balance = list.Sum(t =>
-                    t.Type == TransactionType.Deposit ? t.Amount : -t.Amount);
-                return Task.FromResult(balance);
+                balance += t.Type == TransactionType.Deposit ? t.Amount : -t.Amount;
             }
+
+            return Task.FromResult(balance);
         }
 
         public Task<IReadOnlyList<Transaction>> GetTransactionHistory(string accountId)
         {
-            if (!_store.TryGetValue(accountId, out var list))
+            if (!_store.TryGetValue(accountId, out var queue))
                 return Task.FromResult((IReadOnlyList<Transaction>)new List<Transaction>());
 
-            lock (list)
-            {
-                var copy = list.ToList();
-                return Task.FromResult((IReadOnlyList<Transaction>)copy);
-            }
+            var history = queue.ToList();
+            return Task.FromResult((IReadOnlyList<Transaction>)history);
         }
     }
 }

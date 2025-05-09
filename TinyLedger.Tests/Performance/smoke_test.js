@@ -5,7 +5,7 @@ export const options = {
   insecureSkipTLSVerify: true,
   noConnectionReuse: false,
   stages: [
-    { duration: "1m", target: 10 }, // ramp-up to 10 users
+    { duration: "1m", target: 1400 }, // ramp-up to 10 users
     { duration: "10s", target: 0 }, // scale down to 0 users
   ],
 };
