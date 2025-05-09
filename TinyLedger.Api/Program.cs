@@ -3,6 +3,8 @@ using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 using TinyLedger.Infrastructure;
 using TinyLedger.Api.Middlewares;
+using TinyLedger.Api.Converters;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +15,7 @@ builder.Services
     .AddControllers()
     .AddJsonOptions(opts =>
     {
-        opts.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
+        opts.JsonSerializerOptions.Converters.Add(new SafeEnumConverter<TransactionType>());
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseMiddleware<ErrorHandlerMiddleware>();
 app.MapControllers();
 app.Run();
