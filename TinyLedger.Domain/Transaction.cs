@@ -7,6 +7,7 @@ public class Transaction
     public decimal Amount { get; init; }
     public TransactionType Type { get; init; }
     public string Description { get; init; } = string.Empty;
+    public string AccountId { get; set; } = string.Empty;
 
     public Transaction(decimal amount, TransactionType type, string description = "")
     {
@@ -17,6 +18,9 @@ public class Transaction
         Type = type;
         Description = description;
     }
+
+    // For EF Core
+    private Transaction() { }
 
     public decimal GetSignedAmount() => Type == TransactionType.Deposit ? Amount : -Amount;
 }

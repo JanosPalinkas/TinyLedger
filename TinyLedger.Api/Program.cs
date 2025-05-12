@@ -2,13 +2,23 @@ using MediatR;
 using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 using TinyLedger.Infrastructure;
+using TinyLedger.Infrastructure.Persistence;
+using TinyLedger.Infrastructure.Repositories;
 using TinyLedger.Api.Middlewares;
 using TinyLedger.Api.Converters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSingleton<ILedgerRepository, InMemoryLedgerRepository>();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<TinyLedgerDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+//builder.Services.AddSingleton<ILedgerRepository, InMemoryLedgerRepository>();
+builder.Services.AddScoped<ILedgerRepository, EfCoreLedgerRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecordTransactionCommandHandler).Assembly));
 
 builder.Services
