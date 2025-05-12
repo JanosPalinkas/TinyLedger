@@ -1,4 +1,3 @@
-
 ## Build and packaging
 bin/
 obj/
@@ -39,7 +38,7 @@ TestResults/
 *.testsettings
 *.vsmdi
 
-## Other
+## Other tools
 *.ncrunch*
 _ReSharper*/
 *.resharper
@@ -61,7 +60,7 @@ artifacts/
 ## Auto-generated
 Generated_Code/
 
-## Local secrets (optional if used)
+## Local secrets
 secrets.json
 
 ## Reports
@@ -73,3 +72,23 @@ lcov.info
 publish/
 
 **/TestResults/
+
+# Node.js (React frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# React build output
+build/
+dist/
+.env*
+.env.*.local
+
+# VS Code workspace storage
+.vscode/*.code-workspace
+
+# Frontend static assets
+*.tgz
+*.zip
