@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   useLocation,
 } from "react-router-dom";
 import TransactionList from "./components/TransactionList";
@@ -12,7 +13,8 @@ import NavBar from "./components/NavBar";
 
 const AppRoutes: React.FC = () => {
   const location = useLocation();
-  const isAuthenticated = !!localStorage.getItem("token");
+  const token = localStorage.getItem("token");
+  const isAuthenticated = !!token;
   const showNav = isAuthenticated && location.pathname !== "/login";
 
   return (
@@ -20,8 +22,28 @@ const AppRoutes: React.FC = () => {
       {showNav && <NavBar />}
       <Routes>
         <Route path="/login" element={<LoginForm />} />
-        <Route path="/" element={<TransactionList />} />
-        <Route path="/users" element={<CreateUserForm />} />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <TransactionList />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            isAuthenticated ? (
+              <CreateUserForm />
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
+        {/* Fallback for unknown paths */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

@@ -26,7 +26,7 @@ const NavBar: React.FC = () => {
         Transactions
       </Link>
 
-      {}
+      {/*  */}
       {role === "Admin" && (
         <Link to="/users" style={{ marginRight: "1rem" }}>
           Create User
