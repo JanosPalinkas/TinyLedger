@@ -37,4 +37,15 @@ public class EfCoreLedgerRepository : ILedgerRepository
         return transactions.Sum(t =>
             t.Type == TransactionType.Deposit ? t.Amount : -t.Amount);
     }
+
+    public async Task CreateUserAsync(User user)
+    {
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+    }
 }

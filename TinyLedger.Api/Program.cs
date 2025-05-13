@@ -9,6 +9,9 @@ using TinyLedger.Api.Converters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using TinyLedger.Application.UseCases.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +20,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<TinyLedgerDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-//builder.Services.AddSingleton<ILedgerRepository, InMemoryLedgerRepository>();
 builder.Services.AddScoped<ILedgerRepository, EfCoreLedgerRepository>();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(RecordTransactionCommandHandler).Assembly));
 
@@ -27,6 +29,10 @@ builder.Services
     {
         opts.JsonSerializerOptions.Converters.Add(new SafeEnumConverter<TransactionType>());
     });
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserCommandValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
