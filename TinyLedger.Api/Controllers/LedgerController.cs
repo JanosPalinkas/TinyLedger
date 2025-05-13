@@ -4,11 +4,13 @@ using TinyLedger.Application.UseCases.Transactions;
 using TinyLedger.Domain;
 using MediatR;
 using TinyLedger.Api.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TinyLedger.Api.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Authorize]
+    [Route("api/accounts")]
     public class LedgerController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -18,27 +20,46 @@ namespace TinyLedger.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("accounts/{accountId}/transactions")]
-        public async Task<IActionResult> RecordTransaction(string accountId, [FromBody] RecordTransactionCommand command)
+        private string? GetUserAccountId()
         {
+            return User.FindFirst("accountId")?.Value;
+        }
+
+        [HttpPost("transactions")]
+        public async Task<IActionResult> RecordTransaction([FromBody] RecordTransactionCommand command)
+        {
+            var accountId = GetUserAccountId();
+
+            if (string.IsNullOrEmpty(accountId))
+                return Unauthorized("Missing AccountId claim.");
+
             command.AccountId = accountId;
             await _mediator.Send(command);
             return Ok();
         }
 
-        [HttpGet("accounts/{accountId}/balance")]
-        public async Task<ActionResult<decimal>> GetBalance(string accountId)
+        [HttpGet("balance")]
+        public async Task<ActionResult<decimal>> GetBalance()
         {
+            var accountId = GetUserAccountId();
+
+            if (string.IsNullOrEmpty(accountId))
+                return Unauthorized("Missing AccountId claim.");
+
             var result = await _mediator.Send(new GetBalanceQuery(accountId));
             return Ok(result);
         }
 
-        [HttpGet("accounts/{accountId}/transactions")]
+        [HttpGet("transactions")]
         public async Task<ActionResult<PaginatedResult<Transaction>>> GetTransactionHistory(
-            string accountId,
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 20)
         {
+            var accountId = GetUserAccountId();
+
+            if (string.IsNullOrEmpty(accountId))
+                return Unauthorized("Missing AccountId claim.");
+
             var allTransactions = await _mediator.Send(new GetTransactionHistoryQuery(accountId));
 
             var paginated = allTransactions
