@@ -6,10 +6,10 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import TransactionList from "./components/TransactionList";
-import CreateUserForm from "./components/CreateUserForm";
-import LoginForm from "./components/LoginForm";
-import NavBar from "./components/NavBar";
+import TransactionPage from "./components/Transaction/TransactionPage";
+import CreateUserForm from "./components/User/CreateUserForm";
+import LoginForm from "./components/Login/LoginForm";
+import NavBar from "./components/Shared/NavBar";
 
 const AppRoutes: React.FC = () => {
   const location = useLocation();
@@ -26,7 +26,7 @@ const AppRoutes: React.FC = () => {
           path="/"
           element={
             isAuthenticated ? (
-              <TransactionList />
+              <TransactionPage />
             ) : (
               <Navigate to="/login" replace />
             )

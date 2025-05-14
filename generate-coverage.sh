@@ -16,7 +16,7 @@ echo "🔨 Building the solution..."
 dotnet build
 
 echo "🧪 Running tests with coverage..."
-dotnet test $TEST_PROJECT --collect:"XPlat Code Coverage"
+dotnet test $TEST_PROJECT --collect:"XPlat Code Coverage" --filter "Category=UnitTests"
 
 echo "📊 Generating coverage report..."
 reportgenerator \

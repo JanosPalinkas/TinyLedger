@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { authenticate } from "../../services/authService";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -9,20 +9,7 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5078/api/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-
-      const token = response.data.token;
-      localStorage.setItem("token", token);
-
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      localStorage.setItem("accountId", payload.accountId);
-
+      await authenticate(email, password);
       window.location.href = "/";
     } catch (err) {
       setError("Invalid email or password");

@@ -13,11 +13,13 @@ namespace TinyLedger.Api.Controllers
     [Route("api/accounts")]
     public class LedgerController : ControllerBase
     {
+        private readonly ILogger<LedgerController> _logger;
         private readonly IMediator _mediator;
 
-        public LedgerController(IMediator mediator)
+        public LedgerController(IMediator mediator, ILogger<LedgerController> logger)
         {
             _mediator = mediator;
+            _logger = logger;
         }
 
         private string? GetUserAccountId()
@@ -32,7 +34,7 @@ namespace TinyLedger.Api.Controllers
 
             if (string.IsNullOrEmpty(accountId))
                 return Unauthorized("Missing AccountId claim.");
-
+            
             command.AccountId = accountId;
             await _mediator.Send(command);
             return Ok();
@@ -44,8 +46,12 @@ namespace TinyLedger.Api.Controllers
             var accountId = GetUserAccountId();
 
             if (string.IsNullOrEmpty(accountId))
+            {
+                _logger.LogWarning("Missing AccountId claim on balance request.");
                 return Unauthorized("Missing AccountId claim.");
-
+            }
+                
+            _logger.LogInformation("Retrieving balance for account {AccountId}", accountId);
             var result = await _mediator.Send(new GetBalanceQuery(accountId));
             return Ok(result);
         }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TinyLedger.Domain;
 using TinyLedger.Infrastructure.Configurations;
+using TinyLedger.Infrastructure.Persistence.Configurations;
 
 namespace TinyLedger.Infrastructure.Persistence;
 
@@ -18,5 +19,6 @@ public class TinyLedgerDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new TransactionConfiguration());
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
     }
 }

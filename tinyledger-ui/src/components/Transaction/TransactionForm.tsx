@@ -4,17 +4,19 @@ interface Props {
   onSubmit: (amount: number, description: string, type: string) => void;
 }
 
+const transactionTypes = ["Deposit", "Withdraw"];
+
 const TransactionForm: React.FC<Props> = ({ onSubmit }) => {
-  const [amount, setAmount] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-  const [type, setType] = useState<string>("Deposit");
+  const [amount, setAmount] = useState(0);
+  const [description, setDescription] = useState("");
+  const [type, setType] = useState(transactionTypes[0]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit(amount, description, type);
     setAmount(0);
     setDescription("");
-    setType("Deposit");
+    setType(transactionTypes[0]);
   };
 
   return (
@@ -34,8 +36,11 @@ const TransactionForm: React.FC<Props> = ({ onSubmit }) => {
         required
       />
       <select value={type} onChange={(e) => setType(e.target.value)} required>
-        <option value="Deposit">Deposit</option>
-        <option value="Withdraw">Withdraw</option>
+        {transactionTypes.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
       </select>
       <button type="submit">Submit</button>
     </form>

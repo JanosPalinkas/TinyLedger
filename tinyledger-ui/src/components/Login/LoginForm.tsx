@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
-import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
+import { authenticate } from "../../services/authService";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -13,21 +12,9 @@ const LoginForm: React.FC = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5078/api/auth/login", {
-        email,
-        password,
-      });
-      const token = res.data.token;
-      localStorage.setItem("token", token);
-
-      const decoded: any = jwtDecode(token);
-      setAuthData({
-        token,
-        email: decoded.email,
-        name: decoded.name,
-        roles: decoded.role ? [decoded.role].flat() : [],
-      });
-
+      const authInfo = await authenticate(email, password);
+      localStorage.setItem("token", authInfo.token);
+      setAuthData(authInfo);
       navigate("/");
     } catch (err) {
       console.error("Login failed:", err);

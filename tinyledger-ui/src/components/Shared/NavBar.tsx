@@ -1,19 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getUserRoleFromToken } from "../../utils/tokenUtils";
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
-  let role: string | null = null;
-  if (token) {
-    try {
-      const decoded = JSON.parse(atob(token.split(".")[1]));
-      role = decoded.role;
-    } catch (err) {
-      console.error("Invalid JWT", err);
-    }
-  }
+  const role = getUserRoleFromToken();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -26,7 +17,6 @@ const NavBar: React.FC = () => {
         Transactions
       </Link>
 
-      {/*  */}
       {role === "Admin" && (
         <Link to="/users" style={{ marginRight: "1rem" }}>
           Create User
