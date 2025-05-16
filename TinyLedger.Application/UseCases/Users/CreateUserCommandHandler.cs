@@ -2,7 +2,7 @@ using MediatR;
 using TinyLedger.Domain;
 
 namespace TinyLedger.Application.UseCases.Users;
-
+ 
 public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Guid>
 {
     private readonly ILedgerRepository _repository;

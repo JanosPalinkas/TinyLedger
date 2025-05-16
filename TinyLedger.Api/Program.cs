@@ -29,7 +29,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // MediatR
 builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(RecordTransactionCommandHandler).Assembly));
-
+ 
 // Controllers & JSON
 builder.Services
     .AddControllers()
