@@ -1,7 +1,7 @@
 using MediatR;
 
 namespace TinyLedger.Application.UseCases.Users;
-
+ 
 public class CreateUserCommand : IRequest<Guid>
 {
     public string Email { get; }
